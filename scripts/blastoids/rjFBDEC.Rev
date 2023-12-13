@@ -1,0 +1,124 @@
+
+taxa <- readTaxonData("data/blastoid_time.csv", separator = ",")
+morpho <- readDiscreteCharacterData("data/matrix_only.nex")
+morpho.addMissingTaxa(taxa)
+range_fn = "data/blastoid_geog2.nex"
+ranges = readDiscreteCharacterData(range_fn)
+range_num = formatDiscreteCharacterData(ranges, "DEC")
+out_fn   = "output/"
+
+
+# data dimensions
+n_areas  = ranges.nchar()
+n_states = floor(2^n_areas)
+
+# get the converted state descriptions
+state_desc = range_num.getStateDescriptions()
+
+state_desc_str = "state,range\n"
+for (i in 1:state_desc.size())
+{
+    state_desc_str += (i-1) + "," + state_desc[i] + "\n"
+}
+write(state_desc_str, file=out_fn+".state_labels.txt")
+
+
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+n_taxa <- taxa.size()
+
+num_branches <- 2 * n_taxa - 2
+
+timeline <- v(520);
+# Shifts after Mass Extinctions
+timeline1 <- v(359.3, 443.1);  # Shifts after Devonian & Ordovician
+# Shifts after Mass Extinctions & Separate Mass Extinction Interval Rates
+timeline2 <- v(359.3, 371.1, 443.05, 445.2);  # Shifts after Devonian, during Famennian (latest Devonian), after Ordovician, during Hirnantian (latest Ordovician)
+# Shifts after End-Ordovician and during latest Ordovician
+timeline3 <- v(443.05, 445.2);  # Shift after Ordovician, & during Hirnantian
+# This looks redundant: I don't remember why we'd separate the middle Hirnantian?
+timeline4 <- v(443.8, 445.2 );  # Shift in middle of Hirnantian & onset of Hirnantian: Ditch?
+# Shifts after each Period
+timeline5a <- v(520,486.85,443.05,419.0,359.3,298.9)  # Shift after each period (Cambrian, Ordovician, Silurian, Devonian, Carboniferous; Permian excluded because we do not have Triassic blastoids)
+# Shifts after each Period, but skipping Cambrian shift because we don't have any Cambrian ingroup taxa; we might use this instead for 5a
+timeline5b <- v(520,443.05,419.0,359.3,298.9)  # Shift after each relevant period (Ordovician, Silurian, Devonian, Carboniferous; Permian excluded again; Cm-O boundary excluded because we barely have any Cambrian taxa & those are outgroups)
+timeline6 <- v(520,486.85,445.2,443.05,419.0,361.8,359.3,298.9)
+
+
+fbd_indicator ~ dnCategorical(simplex(1,1,1,1,1,1, 1, 1));
+fbd_indicator.setValue(3);
+moves.append( mvRandomGeometricWalk(fbd_indicator, weight=10.0, tune=FALSE) );
+fbd_vec := v(timeline, timeline1, timeline2, timeline3, timeline4, timeline5a, timeline5b, timeline6);
+times := fbd_vec[fbd_indicator]
+times.size()
+source("scripts/model_FBD.Rev")
+
+fbd_dist = dnFBDP(originAge=origin_time, lambda=speciation_rate, mu=extinction_rate, psi=psi, rho=rho, timeline=times, taxa=taxa, condition="sampling")
+
+fbd_tree ~ dnConstrainedTopology(fbd_dist)
+moves.append(mvFNPR(fbd_tree, weight=15.0))
+moves.append(mvCollapseExpandFossilBranch(fbd_tree, origin_time, weight=6.0))
+moves.append(mvNodeTimeSlideUniform(fbd_tree, weight=40.0))
+moves.append(mvRootTimeSlideUniform(fbd_tree, origin_time, weight=5.0))
+
+ # Setup the fossil tip sampling #
+
+ # Use a for loop to create a uniform distribution on the occurence time for each fossil #
+
+ # The boundaries of the uniform distribution are specified in the tsv file #
+
+ fossils = fbd_tree.getFossils()
+ for(i in 1:fossils.size())
+{
+    fossils[i]
+    t[i] := tmrca(fbd_tree, clade(fossils[i]))
+    a_i = fossils[i].getMinAge()
+    b_i = fossils[i].getMaxAge()
+    F[i] ~ dnUniform(t[i] - b_i, t[i] - a_i)
+ #   F[i].clamp( 0 )
+}
+
+ # Add a move to sample the fossil times #
+ moves.append( mvFossilTimeSlideUniform(fbd_tree, origin_time, weight=5.0) )
+
+num_samp_anc := fbd_tree.numSampledAncestors()
+
+clock_morpho ~ dnExponential(1.0)
+moves.append( mvScale(clock_morpho, lambda=0.01, weight=4.0) )
+moves.append( mvScale(clock_morpho, lambda=0.1,  weight=4.0) )
+moves.append( mvScale(clock_morpho, lambda=1,    weight=4.0) )
+
+
+character_indicator ~ dnCategorical(simplex(1,1,1,1,1));
+character_indicator.setValue(2);
+moves.append( mvRandomGeometricWalk(character_indicator, weight=10.0, tune=FALSE) );
+
+
+alpha_morpho ~ dnUniform( 0, 1E6 )
+rates_morpho := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+#Moves on the parameters of the Gamma distribution.
+moves.append(mvScale(alpha_morpho, lambda=1, weight=2.0))
+
+rates_morpho_all_part := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+rates_morpho_oral_plate := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+rates_morpho_oral_peri := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+rates_morpho_resp_theca := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 4 )
+
+char_vec := v(rates_morpho, rates_morpho_resp_theca, rates_morpho_oral_plate, rates_morpho_oral_peri, rates_morpho_all_part );
+site_rates := char_vec[character_indicator]
+
+source("scripts/model_Mk.Rev")
+source("scripts/model_Mk_FullPartition.Rev")
+source("scripts/model_Mk_oral_plate_feeding.Rev")
+source("scripts/model_Mk_Oral_Peri.Rev")
+source("scripts/model_Mk_resp_thecal.Rev")
+source("scripts/model_DEC.Rev")
+
+mymodel = model(fbd_tree)
+monitors.append(mnModel(filename="output/all_part.log", printgen=100))
+monitors.append(mnFile(filename="output/all_part.trees", printgen=100,  fbd_tree))
+monitors.append(mnScreen(printgen=100, num_samp_anc, origin_time, character_indicator))
+mymcmc = mcmc(mymodel, monitors, moves, nrun=2)
+mymcmc.run(generations=100000000)
+q()

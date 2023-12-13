@@ -1,0 +1,67 @@
+#NEXUS
+
+Begin data;
+Dimensions ntax=57 nchar=6;
+Format datatype=Standard missing=? gap=- labels="01";
+Matrix
+            [A B C D E F]
+Ambolostoma_baileyi	100000
+Angioblastus_boliviensis	001000
+Angioblastus_dotti	100000
+Asterocrinus_benniei	010000
+Brachyschisma_corrugatum	010000
+Cheirocystis_fultonensis    010000
+Cryptoblastus_melo	010000
+Codaster_acutus	010000
+Cribroblastus_cornutus	010000
+Cryptoschisma_schulzii	001000
+Diploblastus_glaber	010000
+Decaschisma_pulchellus	010000
+Decemboblastus_melonoides	010000
+Deliablastus_cumberlandensis	010000
+Deltoblastus_permicus	000100
+Deltoblastus_batheri	000100
+Devonoblastus_whiteavesi	010000
+Eleutherocrinus_cassadayi	010000
+Elaeacrinus_verneuili	010000
+Ellipticoblastus_ellipticus	010000
+Granatocrinus_granulatus	010000
+Globoblastus_norwoodi	010000
+Hadroblastus_convexus	100000
+Heteroschisma_alternatus	010000
+Hydroblastus_herdyi	010000
+Hyperoblastus_goldringae	010000
+Iranoblastus_nodosus	001000
+Lophoblastus_neglectus	010000
+Leptoschisma_lorae	010000
+Mesoblastus_crenulatus	001000
+Metablastus_wortheni	010000
+Monadoblastus_granulosus	100000
+Monoschizoblastus_rofei	010000
+Nucleocrinus_elegans	010000
+Notoblastus_brevispinus	000100
+Orbiblastus_hoskyni	100000
+Orophocrinus_stelliformis	010000
+Pentremitidea_paillettei	001000
+Perittoblastus_liratus	001000
+Phaenoblastus_caryophyllatus	001000
+Placoblastus_obovatus	010000
+Pleuroschisma_lycorias	010000
+Polydeltoideus_enodatus	100000
+Poroblastus_granulosus	010000
+Pterotoblastus_gracilis	000100
+Pentremites_godoni	010000
+Pentremites_pulchellus	010000
+Pinguiblastus_tushanensis	000010
+Sagittoblastus_wanneri	000001
+Schizoblastus_sayi	010000
+Sinopetaloblastus_jinxingae	000010
+Tanaoblastus_roemeri	010000
+Timoroblastus_coronatus_constrictus	000100
+Tricoelocrinus_woodmani	010000
+Troosticrinus_reinwardti	010000
+Stephanocrinus_angulatus	010000
+Cupulocorona_gemmiformis	010000
+    ;
+End;
+
