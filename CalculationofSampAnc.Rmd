@@ -1,0 +1,73 @@
+---
+title: "ProcessingSampledAncestors"
+author: "April Wright"
+date: "2023-12-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Read in our posterior traces: DEC
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+datab1 <- read.delim("output_dicynos/foss_DEC_run_1.log", sep = "\t")
+datab2 <- read.delim("output_dicynos/foss_DEC_run_2.log", sep = "\t")
+data_bio_geo <- rbind(datab1, datab2)
+data_bio_geo <- data_bio_geo %>%
+  mutate("Treatment" = "BioGeo") %>% 
+  select(num_samp_anc, Treatment)
+```
+
+# Read in our posterior traces: no DEC
+
+```{r}
+datanb1 <- read.delim("output_dicynos/foss_discrete_run_1.log", sep = "\t")
+datanb2 <- read.delim("output_dicynos/foss_discrete_run_2.log", sep = "\t")
+data_no_biogeo <- rbind(datanb1, datanb2)
+data_no_biogeo <- data_no_biogeo %>%
+  mutate("Treatment" = "NoBioGeo") %>% 
+  select(num_samp_anc, Treatment)
+```
+
+# Plot the two
+```{r}
+mega_df <- rbind(data_no_biogeo, data_bio_geo)
+
+ggplot(mega_df, aes(x = num_samp_anc, fill=Treatment)) +  geom_bar(position = "dodge")
+```
+# Sampled Descendants
+
+First, munge out the speciation, extinction, and psi rates from our actual data.
+
+```{r}
+data_bio_geo <- rbind(datab1, datab2)
+data_bio_geo <- data_bio_geo %>% 
+  select(speciation_rate, extinction_rate, psi)
+data_no_biogeo <- rbind(datanb1, datanb2)
+data_no_biogeo <- data_no_biogeo %>% 
+  select(speciation_rate, extinction_rate, psi)
+```
+
+Now, we calculate our expected sampled ancestors, sensu Foote 1996.
+
+```{r}
+#  - `q`: The extinction rate of the species.
+#  - `p`: The origination rate of the species.
+#  - `R`: The probability of preserving a species at least once within the time it exists.
+#  - `t`: The duration for which preservation probability is calculated.
+#  - `N`: The number of species
+
+paleotree::probAnc(p = round(data_no_biogeo$speciation_rate[1], digits = 2), q = round(data_no_biogeo$extinction_rate[1], digits=1), R = data_no_biogeo$psi[1], mode = "budding", analysis ="indirectDesc")
+```
+
+And we can do this across the whole sample:
+
+```{r}
+across()
+
+```
