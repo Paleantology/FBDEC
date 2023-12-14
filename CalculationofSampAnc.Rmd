@@ -47,11 +47,18 @@ First, munge out the speciation, extinction, and psi rates from our actual data.
 ```{r}
 data_bio_geo <- rbind(datab1, datab2)
 data_bio_geo <- data_bio_geo %>% 
-  select(speciation_rate, extinction_rate, psi)
+  select(speciation_rate, extinction_rate, psi) %>% 
+    mutate("Treatment" = "biogeo")
 data_no_biogeo <- rbind(datanb1, datanb2)
 data_no_biogeo <- data_no_biogeo %>% 
-  select(speciation_rate, extinction_rate, psi)
+  select(speciation_rate, extinction_rate, psi) %>% 
+  mutate("Treatment" = "nobiogeo")
+bio_no_bio <- rbind(data_bio_geo, data_no_biogeo)
+
+ggplot(bio_no_bio, aes(x = psi, fill=Treatment)) +  geom_density(alpha = .5) + theme_bw()
+
 ```
+
 
 Now, we calculate our expected sampled ancestors, sensu Foote 1996.
 
@@ -65,9 +72,40 @@ Now, we calculate our expected sampled ancestors, sensu Foote 1996.
 paleotree::probAnc(p = round(data_no_biogeo$speciation_rate[1], digits = 2), q = round(data_no_biogeo$extinction_rate[1], digits=1), R = data_no_biogeo$psi[1], mode = "budding", analysis ="indirectDesc")
 ```
 
-And we can do this across the whole sample:
+And we can do this across the whole sample for each of our treatments:
 
 ```{r}
-across()
+no_biogeo_values <- c()
+for (i in 1:nrow(data_no_biogeo)){
+  value <- paleotree::probAnc(p = data_no_biogeo$extinction_rate[i], q = data_no_biogeo$extinction_rate[i], R = data_no_biogeo$psi[i], mode = "budding", analysis ="indirectDesc")
+ no_biogeo_values <- append(values, value)
+}
+
+no_bio_geo_df <- as.data.frame( no_biogeo_values)
+no_bio_geo_df <- no_bio_geo_df  %>% 
+  mutate("Treatment" = "No BioGeo") %>% 
+    rename("ExpectedSampAnc" = "no_biogeo_values")
 
 ```
+```{r}
+biogeo_values <- c()
+for (i in 1:nrow(data_bio_geo)){
+  value <- paleotree::probAnc(p = data_bio_geo$extinction_rate[i], q = data_bio_geo$extinction_rate[i], R = data_bio_geo$psi[i], mode = "budding", analysis ="indirectDesc")
+ biogeo_values <- append(values, value)
+}
+
+bio_geo_df <- as.data.frame(biogeo_values)
+bio_geo_df <- bio_geo_df  %>% 
+  mutate("Treatment" = "BioGeo") %>% 
+  rename("ExpectedSampAnc" = "biogeo_values")
+
+```
+
+Let's take a look at these.
+
+```{r}
+large_df <- rbind(bio_geo_df, no_bio_geo_df)
+ggplot(large_df, aes(x = ExpectedSampAnc, fill=Treatment)) +  geom_density(alpha = .5) + theme_bw()
+
+```
+
