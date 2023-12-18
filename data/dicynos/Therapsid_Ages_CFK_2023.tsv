@@ -64,6 +64,9 @@ Jimusaria_sinkiangensis	255.24	251.9
 Sintocephalus_alticeps	256.8	255.24
 Basilodon_woodwardi	256.8	253
 Turfanodon_bogdaensis	255.24	251.9
+Turfanodon_jiufengensis	255.24	251.9
+Taoheodon_baizhijuni	255.24	251.9
+Counillonia_superoculis	253	251
 Gordonia_traquairi	255.24	251.9
 Euptychognathus_bathyrhynchus	256.8	255.24
 Lystrosaurus_hedini	251.36	250.53
@@ -71,14 +74,16 @@ Lystrosaurus_maccaigi	253	251.8
 Lystrosaurus_curvatus	252	251.8
 Lystrosaurus_declivis	251.9	251.2
 Lystrosaurus_murrayi	251.9	251.2
+Shansiodon	243.53	241.48
 Tetragonias_njalilus	247.2	235
 Vinceria_andina	247.2	237
 Rhinodicynodon_gracile	243.53	241.48
-Jachaleria_colorata	227	225
+Dinodontosaurus_brevirostris	236.1	231.4
+Dinodontosaurus_tener	238	233.23
 Angonisaurus_cruickshanki	247.2	235
 Kannemeyeria_simocephalus	247.2	242
 Kannemeyeria_lophorhinus	247.2	235
-Dinodontosaurus_tener	238	233.23
+Kannemeyeria_aganosteus	247.2	237
 Dolichuranus_primaevus	247.2	242
 Sinokannemeyeria	243.53	241.48
 Parakannemeyeria	243.53	241.48
@@ -86,6 +91,7 @@ Xiyukannemeyeria_brevirostris	243.53	241.48
 Rabidosaurus_cristatus	243.53	241.48
 Rhadiodromus	243.53	241.48
 Wadiasaurus_indicus	247.2	242
+Shaanbeikannemeyeria_xilougouensis	244	241.48
 Rechnisaurus_cristarhynchus	247.2	242
 Uralokannemeyeria_vjuschkovi	243.53	241.48
 Zambiasaurus_submersus	247.2	235
@@ -94,6 +100,8 @@ Moghreberia_nmachouensis	232	227
 Stahleckeria_potens	238	233.23
 Sangusaurus_parringtonii	247.2	235
 Eubrachiosaurus_browni	232	215
+Jachaleria_colorata	227	225
+Jachaleria_candelariensis	227	225
 Ischigualastia_jenseni	231.4	228.91
 Rastodon_procurvidens	272.3   264.38	
 Sauroscaptor_tharavati	256.8	255.24
@@ -103,3 +111,5 @@ Pentasaurus_goggai	227	215
 Thliptosaurus_imperforatus	253	251.9
 Dicynodon_angielczyki	255.24	251.9
 Daptocephalus_huenei	255.24	251.9
+Kunpania_scopulusa	262	255.24
+Lisowicia_bojani	211	208

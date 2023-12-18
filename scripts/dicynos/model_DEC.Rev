@@ -38,14 +38,15 @@ Q_DEC := fnDECRateMatrix(dispersalRates=dr,
 # build cladogenetic transition probabilities
 clado_event_types <- [ "s", "a" ]
 clado_event_probs <- simplex(1,1)
-P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
-                         eventTypes=clado_event_types,
-                         numCharacters=n_areas)
+#P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
+#                         eventTypes=clado_event_types,
+#                         numCharacters=n_areas)
 
 # the phylogenetic CTMC with cladogenetic events
+clado <- rep(speciation_rate, n_areas)
 m_bg ~ dnPhyloCTMCClado(tree=timetree,
                            Q=Q_DEC,
-                           cladoProbs=P_DEC,
+                           cladoProbs=clado,
                            branchRates=rate_bg,
                            type="NaturalNumbers",
                            nSites=1)

@@ -1,5 +1,5 @@
 BEGIN DATA;
-	DIMENSIONS	NTAX=107 NCHAR=7;
+	DIMENSIONS	NTAX=115 NCHAR=7;
 	Format datatype=Standard missing=? gap=- labels="01";
 MATRIX
 [SoAm	SoAf	In	NoAm	Eu	As	An]
@@ -61,6 +61,7 @@ Katumbia_parringtoni	0100000
 Delectosaurus_arefjevi	0000100
 Dicynodon_lacerticeps	0100000
 Dicynodon_huenei	0100000
+Dinodontosaurus_brevirostris	1000000	
 Daptocephalus_leoniceps	0100000
 Dinanomodon_gilli	0100000
 Peramodon_amalitzkii	0000100
@@ -76,7 +77,7 @@ Lystrosaurus_maccaigi	0110001
 Lystrosaurus_curvatus	0100001
 Lystrosaurus_declivis	0100000
 Lystrosaurus_murrayi	0110000
-Shansiodon_sp.		0100010
+Shansiodon	0100010
 Tetragonias_njalilus	0100000
 Vinceria_andina	1000000
 Rhinodicynodon_gracile	0000100
@@ -91,7 +92,7 @@ Xiyukannemeyeria_brevirostris	0000010
 Rabidosaurus_cristatus	0000100
 Rhadiodromus	0000100
 Wadiasaurus_indicus	0010000
-Shaanbeikannemeyeria_sp.	0000010
+Shaanbeikannemeyeria_xilougouensis	0000010
 Rechnisaurus_cristarhynchus	0010000
 Uralokannemeyeria_vjuschkovi	0000100
 Zambiasaurus_submersus	0100000
@@ -101,6 +102,7 @@ Stahleckeria_potens	1000000
 Sangusaurus_parringtonii		0100000
 Eubrachiosaurus_browni	0001000
 Jachaleria_colorata		1000000
+Jachaleria_candelariensis	1000000
 Ischigualastia_jenseni	1000000
 Rastodon_procurvidens	1000000
 Sauroscaptor_tharavati	0010000
@@ -110,5 +112,13 @@ Pentasaurus_goggai	0100000
 Thliptosaurus_imperforatus	0100000
 Dicynodon_angielczyki	0100000
 Daptocephalus_huenei	0100000
+Taoheodon_baizhijuni	0000010
+Kunpania_scopulusa	0000010
+Turfanodon_jiufengensis	0000010
+Lisowicia_bojani	0000100
+Kannemeyeria_aganosteus	1000000
+Counillonia_superoculis	0000010
+
+
 	;
 	END;

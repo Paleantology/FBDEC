@@ -56,7 +56,7 @@ source("scripts/dicynos/model_DEC.Rev")
 #source("scripts/FBD/model_relaxed_BM.Rev") # continuous traits
 
 mymodel = model(timetree)
-
+mymodel.graph("mymodel.tex")
 ############
 # run MCMC #
 
@@ -66,24 +66,24 @@ monitors.append( mnModel(filename="output_dicynos/foss_DEC.log", printgen=10) )
 monitors.append( mnFile(filename="output_dicynos/foss_DEC.trees", printgen=10,timetree) )
 
 # initialize the MCMC object
-mymcmc = mcmc(mymodel, moves, monitors, nruns=2, combine="mixed")
+#mymcmc = mcmc(mymodel, moves, monitors, nruns=2, combine="mixed")
 
 # run the MCMC
-mymcmc.run(generations=100000)
+#mymcmc.run(generations=100000)
 
 # check the performance of the moves
-mymcmc.operatorSummary()
+#mymcmc.operatorSummary()
 
 #########################################
 # read in the tree trace and summarize  #
-trace = readTreeTrace("output_dicynos/foss_DEC.trees", treetype="clock", nruns=2)
+#trace = readTreeTrace("output_dicynos/foss_DEC.trees", treetype="clock", nruns=2)
 
 # maximum a posteriori (MAP) tree
-mapTree(trace, file="output_dicynos/foss_DEC.map.tre")
+#mapTree(trace, file="output_dicynos/foss_DEC.map.tre")
 
 # majority-rule consensus tree
-consensusTree(trace, file="output_dicynos/foss_DEC.maj.tre")
+#consensusTree(trace, file="output_dicynos/foss_DEC.maj.tre")
 
 #################
 # quit RevBayes #
-q()
+#q()
