@@ -1,8 +1,8 @@
 
-taxa <- readTaxonData("data/blastoid_time.csv", separator = ",")
-morpho <- readDiscreteCharacterData("data/matrix_only.nex")
+taxa <- readTaxonData("data/blastoids/blastoid_time.csv", separator = ",")
+morpho <- readDiscreteCharacterData("data/blastoids/matrix_only.nex")
 morpho.addMissingTaxa(taxa)
-range_fn = "data/blastoid_geog2.nex"
+range_fn = "data/blastoids/blastoid_geog2.nex"
 ranges = readDiscreteCharacterData(range_fn)
 range_num = formatDiscreteCharacterData(ranges, "DEC")
 out_fn   = "output/"
